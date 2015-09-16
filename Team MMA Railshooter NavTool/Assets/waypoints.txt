@@ -1,0 +1,12 @@
+M_move 5 0,0,17
+M_wait 1 
+M_move 6 17,0,17
+E_wait 6
+M_wait 7
+E_shake 2 1
+M_move 3 17,0,17
+M_move 5 0,0,17
+M_wait 7
+M_move 3 17,0,17
+M_bezier 4 0,0,0 17,0,0
+M_bezier 4 0,0,0 17,0,0
