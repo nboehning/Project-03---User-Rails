@@ -1,2 +1,3 @@
-M_move 5 0,0,20
-E_splatter 1 1 1 
+M_move 5 0,0,17
+F_LOOKAT 5,5,5 1 1 1 
+M_move 5 0,0,0

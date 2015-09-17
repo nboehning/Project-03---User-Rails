@@ -30,6 +30,7 @@ public class ScriptEngine : MonoBehaviour {
         //Starts the Engine Coroutine
         StartCoroutine(MovementEngine());
         StartCoroutine(Effects());
+        StartCoroutine(FacingEngine());
 	}
 
 	IEnumerator MovementEngine()
@@ -142,6 +143,7 @@ public class ScriptEngine : MonoBehaviour {
         }
     }
 
+
 	IEnumerator movementMove(Vector3 target, float time)
 	{
 		//Tracking the elapsed time
@@ -218,7 +220,7 @@ public class ScriptEngine : MonoBehaviour {
     /// </summary>
     void OnDrawGizmos()
     {
-        Vector3 lineStarting = transform.position;
+        Vector3 lineStarting = Vector3.zero;
         foreach(ScriptMovements move in movements)
         {
             switch(move.moveType)
@@ -287,9 +289,11 @@ public class ScriptEngine : MonoBehaviour {
                     if (facing.targets != null && facing.facingTimes[0] > 0 && facing.holdTimes[0] > 0 && facing.facingTimes[1] > 0)
                     {
                         //Do the facing action
+                        
                         lookScript.targets = facing.targets;
                         lookScript.rotateSpeed = facing.facingTimes;
                         lookScript.lockTime = facing.holdTimes;
+                        lookScript.Activate();
                         //Wait for the specified amount of time on the facing waypoint
                         yield return new WaitForSeconds(facing.facingTimes[0] + facing.facingTimes[1] + facing.holdTimes[0]);
                     }

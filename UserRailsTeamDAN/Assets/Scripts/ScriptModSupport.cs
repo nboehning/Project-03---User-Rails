@@ -104,7 +104,7 @@ public class ScriptModSupport : MonoBehaviour
                             case MovementTypes.MOVE:
                                 tempMove = new ScriptMovements();
                                 tempMove.moveType = MovementTypes.MOVE;
-                                tempMove.movementTime = (float)System.Convert.ToDouble(words[1]);
+                                tempMove.movementTime = System.Convert.ToSingle(words[1]);
                                 coords = words[2].Split(',');
                                 target = new Vector3(System.Convert.ToSingle(coords[0]),
                                     System.Convert.ToSingle(coords[1]), System.Convert.ToSingle(coords[2]));
@@ -137,20 +137,12 @@ public class ScriptModSupport : MonoBehaviour
                     }
                     else if (keywords[0].ToUpper() == "E")
                     {
-                        ScriptScreenFade tempFade;
-                        ScriptSplatter tempSplatter;
-                        ScriptLookAtTarget tempLookAt;
-                        ScriptCameraShake tempShake;
                         ScriptEffects tempEffect;
                         string[] words = keywords[1].Split(' ');
                         switch ((EffectTypes)System.Enum.Parse(typeof(EffectTypes), words[0].ToUpper()))
                         {
                             //@ mike @ reference Marshall
                             case EffectTypes.FADE:
-
-                                tempFade = new ScriptScreenFade();
-                                tempFade.fadeInLength = (float)System.Convert.ToSingle(words[1]);
-
                                 //Fade waypoint spawning Code
                                 tempEffect = new ScriptEffects();
                                 tempEffect.effectType = EffectTypes.FADE;
@@ -189,14 +181,26 @@ public class ScriptModSupport : MonoBehaviour
                     }
                     else if (keywords[0].ToUpper() == "F")
                     {
-                        ScriptFacings tempFacing; 
+                        ScriptFacings tempFacing;
 
                         string[] words = keywords[1].Split(' ');
+                        
                         switch ((FacingTypes)System.Enum.Parse(typeof(FacingTypes), words[0].ToUpper()))
                         {
+                            //Author: Andrew Seba
                             case FacingTypes.LOOKAT:
-                                //Look At waypoint spawning Code
-                                
+                                tempFacing = new ScriptFacings();
+                                tempFacing.facingType = FacingTypes.LOOKAT;
+
+                                coords = words[1].Split(',');
+                                target = new Vector3(System.Convert.ToSingle(coords[0]),
+                                    System.Convert.ToSingle(coords[1]), System.Convert.ToSingle(coords[2]));
+                                tempFacing.targets[0] = (GameObject)Instantiate(facingWaypoint, target, Quaternion.identity);
+                                //tempFacing.targets[1] = (GameObject)Instantiate(facingWaypoint, target, Quaternion.identity);
+                                tempFacing.lockTimes[0] = System.Convert.ToSingle(words[2]);
+                                tempFacing.rotationSpeed[0] = System.Convert.ToSingle(words[3]);
+                                tempFacing.rotationSpeed[1] = System.Convert.ToSingle(words[4]);
+                                tempFacings.Add(tempFacing);
                                 break;
                             case FacingTypes.LOOKCHAIN:
                                 //Look Chain waypoint spawning Code
