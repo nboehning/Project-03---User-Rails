@@ -18,10 +18,19 @@ public class ScriptLookAtTarget : MonoBehaviour {
 
     Quaternion startRotation;
     
+	void Update(){
+		if (Input.GetButtonDown ("Jump")) {
+			Activate(rotateSpeed, targets, lockTime);
+		}
+	}
 
-    public void Activate()
+    public void Activate(float[] pRotateSpeed, GameObject[] pTargets, float[]pLockTimes)
     {
+        rotateSpeed = pRotateSpeed;
+        targets = pTargets;
+        lockTime = pLockTimes;
         startRotation = transform.rotation;
+		StopCoroutine ("ReturnLook");
         StartCoroutine("LookAtTarget");
     }
 
@@ -30,27 +39,30 @@ public class ScriptLookAtTarget : MonoBehaviour {
         for (int i = 0; i < targets.Length; i++ )
         {
             float timeElapsed = 0.0f;
+
             while (timeElapsed < lockTime[i])
             {
                 timeElapsed += Time.deltaTime;
                 Quaternion neededRotation = Quaternion.LookRotation(targets[i].transform.position - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotateSpeed[i]);
-                yield return null;
+				yield return null;
             }
+			yield return new WaitForSeconds(lockTime[i]);
         }
-
         StartCoroutine("ReturnLook");
     }
 
+
+
     IEnumerator ReturnLook()
     {
-        StopCoroutine("LookAtTarget");
         while (transform.forward != Vector3.forward)
         {
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, startRotation, rotateSpeed[targets.Length]);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, startRotation, rotateSpeed[rotateSpeed.Length - 1]);
 
             yield return null;
         }
+
     }
 }

@@ -8,7 +8,8 @@ using System.Collections;
 public class ScriptEngine : MonoBehaviour {
 
 	public ScriptMovements[] movements;
-    public ScriptWaypoints[] facings;
+
+    public ScriptFacings[] facings;
     public ScriptEffects[] effects;
 
     public ScriptCameraShake cameraShakeScript;
@@ -22,6 +23,7 @@ public class ScriptEngine : MonoBehaviour {
         lookAtScript = Camera.main.GetComponent<ScriptLookAtTarget>();
         fadeScript = Camera.main.GetComponent<ScriptScreenFade>();
         splatterScript = Camera.main.GetComponent<ScriptSplatter>();
+
     }
 
 	// Use this for initialization
@@ -29,7 +31,7 @@ public class ScriptEngine : MonoBehaviour {
 	{
         //Starts the Engine Coroutine
         StartCoroutine(MovementEngine());
-        StartCoroutine(Effects());
+        StartCoroutine(EffectsEngine());
         StartCoroutine(FacingEngine());
 	}
 
@@ -89,7 +91,7 @@ public class ScriptEngine : MonoBehaviour {
 		}        
 	}
 
-    IEnumerator Effects()
+    IEnumerator EffectsEngine()
     {
         foreach (ScriptEffects effect in effects)
         {
@@ -108,6 +110,7 @@ public class ScriptEngine : MonoBehaviour {
                     {
                         splatterScript.Activate();
                     }
+                    yield return new WaitForSeconds(effect.effectTime);
                     break;
                 case EffectTypes.SHAKE:
                     if (effect.magnitude != 0)
@@ -118,6 +121,7 @@ public class ScriptEngine : MonoBehaviour {
                     {
                         cameraShakeScript.Activate();
                     }
+                    yield return new WaitForSeconds(effect.effectTime);
                     break;
                 case EffectTypes.FADE:
                     if(effect.imageScale != 0)
@@ -131,7 +135,9 @@ public class ScriptEngine : MonoBehaviour {
                     else
                     {
                         splatterScript.Activate();
+                        
                     }
+                    yield return new WaitForSeconds(effect.effectTime);
                     break;
                 case EffectTypes.WAIT:
                     yield return new WaitForSeconds(effect.effectTime);
@@ -143,6 +149,55 @@ public class ScriptEngine : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// @Author Marshall Mason & Mike Dobson
+    /// </summary>
+    IEnumerator FacingEngine()
+    {
+        ScriptLookAtTarget lookScript = Camera.main.GetComponent<ScriptLookAtTarget>();
+        foreach (ScriptFacings facing in facings)
+        {
+            Debug.Log(facing);
+            switch (facing.facingType)
+            {
+                case FacingTypes.LOOKAT:
+                    
+                        //Do the facing action
+                        lookAtScript.Activate(facing.rotationSpeed, facing.targets, facing.lockTimes);
+                        //Wait for the specified amount of time on the facing waypoint
+                        yield return new WaitForSeconds(facing.rotationSpeed[0] + facing.rotationSpeed[1] + facing.lockTimes[0]);
+                    
+                    break;
+                case FacingTypes.WAIT:
+                    
+                        //Waits for the specified amount of time
+                        yield return new WaitForSeconds(facing.facingTime);
+                    
+                    break;
+                case FacingTypes.LOOKCHAIN:
+                    
+                        //Do the facing action
+                        lookAtScript.Activate(facing.rotationSpeed, facing.targets, facing.lockTimes);
+                        //Wait for the specified amount of time on the facing waypoint
+                        float waitTime = 0;
+                        for (int i = 0; i < facing.targets.Length; i++)
+                        {
+                            waitTime += facing.rotationSpeed[i];
+                            waitTime += facing.lockTimes[i];
+                        }
+                        waitTime += facing.rotationSpeed[facing.rotationSpeed.Length - 1];
+                        yield return new WaitForSeconds(waitTime);
+                    
+                    break;
+                case FacingTypes.FREELOOK:
+
+                    break;
+                default:
+                    ScriptErrorLogging.logError("Invalid movement type!");
+                    break;
+            }
+        }
+    }
 
 	IEnumerator movementMove(Vector3 target, float time)
 	{
@@ -214,13 +269,9 @@ public class ScriptEngine : MonoBehaviour {
         return oneMinusT * oneMinusT * start + 2f * oneMinusT * t * curve + t * t * end;
     }
 
-
-    /// <summary>
-    /// Gizmo drawing.
-    /// </summary>
     void OnDrawGizmos()
     {
-        Vector3 lineStarting = Vector3.zero;
+        Vector3 lineStarting = transform.position;
         foreach(ScriptMovements move in movements)
         {
             switch(move.moveType)
@@ -274,72 +325,5 @@ public class ScriptEngine : MonoBehaviour {
 
     }
 
-    /// <summary>
-    /// @Author Marshall Mason & Mike Dobson
-    /// </summary>
-    IEnumerator FacingEngine()
-    {
-        ScriptLookAtTarget lookScript = Camera.main.GetComponent<ScriptLookAtTarget>();
-        foreach (ScriptWaypoints facing in facings)
-        {
-            Debug.Log(facing.facingType);
-            switch (facing.facingType)
-            {
-                case FacingTypes.LOOKAT:
-                    if (facing.targets != null && facing.facingTimes[0] > 0 && facing.holdTimes[0] > 0 && facing.facingTimes[1] > 0)
-                    {
-                        //Do the facing action
-                        
-                        lookScript.targets = facing.targets;
-                        lookScript.rotateSpeed = facing.facingTimes;
-                        lookScript.lockTime = facing.holdTimes;
-                        lookScript.Activate();
-                        //Wait for the specified amount of time on the facing waypoint
-                        yield return new WaitForSeconds(facing.facingTimes[0] + facing.facingTimes[1] + facing.holdTimes[0]);
-                    }
-                    else
-                    {
-                        ScriptErrorLogging.logError("Look At was skipped due to missing element");
-                    }
-                    break;
-                case FacingTypes.WAIT:
-                    if (facing.facingTimes[0] > 0)
-                    {
-                        //Waits for the specified amount of time
-                        yield return new WaitForSeconds(facing.facingTimes[0]);
-                    }
-                    else
-                    {
-                        ScriptErrorLogging.logError("Facing Wait was skipped due to missing element");
-                    }
-                    break;
-                case FacingTypes.LOOKCHAIN:
-                    if (facing.targets.Length >= facing.holdTimes.Length && facing.facingTimes.Length > facing.holdTimes.Length)
-                    {
-                        //Do the facing action
-                        lookScript.targets = facing.targets;
-                        lookScript.rotateSpeed = facing.facingTimes;
-                        lookScript.lockTime = facing.holdTimes;
-                        //Wait for the specified amount of time on the facing waypoint
-                        float waitTime = 0;
-                        for (int i = 0; i < facing.targets.Length; i++ )
-                        {
-                            waitTime += facing.facingTimes[i];
-                            waitTime += facing.holdTimes[i];
-                        }
-                        waitTime += facing.facingTimes[facing.targets.Length];
-                        yield return new WaitForSeconds(waitTime);
-                    }
-                    else
-                    {
-                        ScriptErrorLogging.logError("Entire Look Chain was skipped due to missing element.");
-                    }
-                    break;
-                default:
-                    ScriptErrorLogging.logError("Invalid movement type!");
-                    break;
 
-            }
-        }
-    }
 }
