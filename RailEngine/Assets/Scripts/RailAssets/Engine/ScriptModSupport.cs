@@ -304,8 +304,8 @@ public class ScriptModSupport : MonoBehaviour
                     player.facings[i] = tempFacings[i];
 					Debug.Log ("add facing " + tempFacings[i].facingType);
                 }
-				Debug.Log ("last facing " + player.facings[player.facings.Length - 1]);
-				Debug.Log ("last facing list type " + tempFacings[tempFacings.Count - 1].facingType);
+				//Debug.Log ("last facing " + player.facings[player.facings.Length - 1]);
+				//Debug.Log ("last facing list type " + tempFacings[tempFacings.Count - 1].facingType);
 			}
         }
     }
