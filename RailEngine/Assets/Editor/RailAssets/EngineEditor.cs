@@ -19,6 +19,14 @@ public class EngineEditor :  Editor
 
 	public override void OnInspectorGUI()
 	{
+
+		if(GUILayout.Button("Create Waypoints"))
+		{
+			ScriptWaypointWindow.Init();
+		}
+
+		// Commented out by @Nathan Boehning to create the Editor Window Button
+		/*
 		//required things for arrays
 		serializedObject.Update ();
 
@@ -32,24 +40,24 @@ public class EngineEditor :  Editor
 		EditorGUILayout.PropertyField(movementsArray);
 
 		if (movementsArray.isExpanded)
-        {
-            //EditorGUILayout.PropertyField(waypointsArray.arraySize)
+		{
+			//EditorGUILayout.PropertyField(waypointsArray.arraySize)
 			EditorGUILayout.PropertyField(movementsArray.FindPropertyRelative("Array.size"));
-            EditorGUI.indentLevel++;
+			EditorGUI.indentLevel++;
 			for (int i = 0; i < movementsArray.arraySize; i++)
-            {
+			{
 				SerializedProperty showInEditor = movementsArray.GetArrayElementAtIndex(i).FindPropertyRelative("showInEditor");
 
-                showInEditor.boolValue = EditorGUILayout.Foldout(showInEditor.boolValue, "Movement " + ( i + 1 ));
+				showInEditor.boolValue = EditorGUILayout.Foldout(showInEditor.boolValue, "Movement " + ( i + 1 ));
 
-                if (showInEditor.boolValue)
-                {
-                    //EditorGUILayout.LabelField("Movement " + (i + 1));
+				if (showInEditor.boolValue)
+				{
+					//EditorGUILayout.LabelField("Movement " + (i + 1));
 					EditorGUILayout.PropertyField(movementsArray.GetArrayElementAtIndex(i));
-                }
-            }
-            EditorGUI.indentLevel--;
-        }
+				}
+			}
+			EditorGUI.indentLevel--;
+		}
 
 		EditorGUILayout.PropertyField(effectsArray);
 		
@@ -94,10 +102,11 @@ public class EngineEditor :  Editor
 			}
 			EditorGUI.indentLevel--;
 		}
-        //--------------------------------
+		//--------------------------------
 
 
-        //required things for arrays
-        serializedObject.ApplyModifiedProperties();
+		//required things for arrays
+		serializedObject.ApplyModifiedProperties();
+		*/
 	}
 }
