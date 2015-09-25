@@ -24,7 +24,8 @@ public enum FacingTypes
     LOOKAT,
     LOOKCHAIN,
     WAIT,
-    FREELOOK
+    FREELOOK,
+    LOOKANDRETURN
 }
 
 public enum EffectTypes
