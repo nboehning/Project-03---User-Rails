@@ -18,11 +18,6 @@ public class ScriptLookAtTarget : MonoBehaviour {
 
     Quaternion startRotation;
     
-	void Update(){
-		if (Input.GetButtonDown ("Jump")) {
-			Activate(rotateSpeed, targets, lockTime);
-		}
-	}
 
     public void Activate(float[] pRotateSpeed, GameObject[] pTargets, float[]pLockTimes)
     {
