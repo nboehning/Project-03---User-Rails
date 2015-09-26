@@ -1,4 +1,0 @@
-M_move 5 0,0,17
-E_wait 5
-M_move 3 17,0,10
-E_shake 5 0.5
