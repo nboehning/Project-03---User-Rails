@@ -17,8 +17,6 @@ public class ScriptCameraShake : MonoBehaviour {
     [Range(0, 10)]
     public float shakeTime = 2.0f;
 
-    float shake = 0f;
-
     Vector3 originalPosition;
 
     //change to 'public void Activate()' when wanting to implement.

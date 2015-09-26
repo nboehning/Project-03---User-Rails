@@ -154,7 +154,7 @@ public class ScriptEngine : MonoBehaviour {
 	/// </summary>
 	IEnumerator FacingEngine()
 	{
-		ScriptLookAtTarget lookScript = Camera.main.GetComponent<ScriptLookAtTarget>();
+		
 		foreach (ScriptFacings facing in facings)
 		{
 			Debug.Log(facing);
