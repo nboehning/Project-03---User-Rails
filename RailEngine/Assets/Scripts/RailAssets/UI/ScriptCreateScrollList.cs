@@ -49,7 +49,7 @@ public class ScriptCreateScrollList : MonoBehaviour {
 
 	public void SomethingToDo(string name)
 	{
-		Debug.Log("I don did something!");
+		
 		Debug.Log(name);
 	}
 
