@@ -32,7 +32,6 @@ public class ScriptSplatter : MonoBehaviour {
     SpriteRenderer splatRenderer;
     Rect splatRect;
     Color splatColor;
-    float elapsedTime = 0.0f;
     float smoothness = 0.02f;
 
 #if UNITYEDITOR
