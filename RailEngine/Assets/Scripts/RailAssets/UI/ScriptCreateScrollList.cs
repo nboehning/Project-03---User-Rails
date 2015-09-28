@@ -51,6 +51,7 @@ public class ScriptCreateScrollList : MonoBehaviour {
 	{
 		
 		Debug.Log(name);
+        Application.LoadLevel("SceneBasic");
 	}
 
 }
