@@ -16,4 +16,10 @@ public class ScriptFacings
 	public float[] lockTimes;
 
     public float facingTime;
+
+    // Boolean for look chain foldout in window @author: Nathan
+    public bool isFoldedOut;
+    public bool dataFoldout;
+    // int for number of elements in the look chain @author: Nathan
+    public int chainCount;
 }

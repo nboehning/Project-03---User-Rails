@@ -1,12 +1,11 @@
-﻿using System.Globalization;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 public class ScriptConfirmationWindow : EditorWindow
 {
-    private string author;
+    private string author = "Author Name";
     private string date;
-    private string levelName;
+    private string levelName = "Level Name";
 
     // Creates a new window that confirms the export, prompts user for author and level name
     public static void Init()
@@ -22,13 +21,13 @@ public class ScriptConfirmationWindow : EditorWindow
     {
 
         // Get the author of the level
-        author = EditorGUILayout.TextField("Author ");
+        author = EditorGUILayout.TextField(author);
 
         // Get the date as a string
         date = System.DateTime.Today.ToString();
 
         // Get the level name
-        levelName = EditorGUILayout.TextField("Level Name ");
+        levelName = EditorGUILayout.TextField(levelName);
 
         if (GUILayout.Button("Confirm Export"))
         {

@@ -20,12 +20,15 @@ public class ScriptEngine : MonoBehaviour
 	public ScriptScreenFade fadeScript;
 	public ScriptSplatter splatterScript;
 
+	private GameObject mainCamera;
 	void Awake()
 	{
 		cameraShakeScript = Camera.main.GetComponent<ScriptCameraShake>();
 		lookAtScript = Camera.main.GetComponent<ScriptLookAtTarget>();
 		fadeScript = Camera.main.GetComponent<ScriptScreenFade>();
 		splatterScript = Camera.main.GetComponent<ScriptSplatter>();
+
+		mainCamera = GameObject.Find("Main Camera");
 
 	}
 
@@ -194,7 +197,29 @@ public class ScriptEngine : MonoBehaviour
 					break;
 				case FacingTypes.FREELOOK:
 
+			        lookAtScript.StartCoroutine("FreeLook", facing.facingTime);
+
+			        yield return new WaitForSeconds(facing.facingTime);
+
 					break;
+				case FacingTypes.LOOKANDRETURN:
+
+					// Author: Nathan Boehning
+					// Copied some code from an above method in order to maintain the workflow
+
+					//Do the facing action
+					lookAtScript.Activate(facing.rotationSpeed, facing.targets, facing.lockTimes);
+
+                    waitTime = 0;
+                    for (int i = 0; i < facing.targets.Length; i++)
+                    {
+                        waitTime += facing.rotationSpeed[i];
+                        waitTime += facing.lockTimes[i];
+                    }
+                    waitTime += facing.rotationSpeed[facing.rotationSpeed.Length - 1];
+                    yield return new WaitForSeconds(waitTime);
+
+                    break;
 				default:
 					ScriptErrorLogging.logError("Invalid movement type!");
 					break;
@@ -327,6 +352,4 @@ public class ScriptEngine : MonoBehaviour
 		}
 
 	}
-
-
 }
