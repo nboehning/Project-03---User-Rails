@@ -9,23 +9,19 @@ using UnityEngine.UI;
 /// </summary>
 public class ScriptSplatter : MonoBehaviour {
 
-    [Tooltip("Total time the splatter will be on screen")]
-    [Range(0,10)]
+
     public float effectTime = 1.0f;
 
-    [Tooltip("Time of effect time spent fading in.")]
-    [Range(0, 3f)]
-    public float fadeInTime = 0.1f;
 
-    [Tooltip("Time of effect time spent fading out.")]
-    [Range(0, 3f)]
-    public float fadeOutTime = 0.1f;
+    public float fadeInTime = 0;
 
-    [Tooltip("Place your splat sprite or texture here.")]
+
+    public float fadeOutTime = 0f;
+
+
     public GameObject splatImage;
 
-    [Tooltip("Designed for 16:9 aspect ratio")]
-    [Range(0,10)]
+
     public float imageScale = 4;
 
 
@@ -33,6 +29,18 @@ public class ScriptSplatter : MonoBehaviour {
     Rect splatRect;
     Color splatColor;
     float smoothness = 0.02f;
+
+
+    //void Update()
+    //{
+    //    if (Input.GetButtonDown("Jump"))
+    //    {
+
+    //        Activate(5, 1, 1, 1);
+
+    //    }
+
+    //}
 
 #if UNITYEDITOR
     public void Awake()
@@ -49,6 +57,7 @@ public class ScriptSplatter : MonoBehaviour {
 #else
     void Awake()
     {
+        splatImage = (GameObject)Resources.Load("splat_1");
         splatRenderer = splatImage.GetComponent<SpriteRenderer>();
     }
 #endif

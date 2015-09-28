@@ -44,17 +44,22 @@ public class ScriptLoad : MonoBehaviour {
 				while ((lineOfText = reader.ReadLine()) != null)
 				{
 
-					
-					switch (lineNumber)
-					{
-						case 0:
-							tempItem.author = lineOfText;
-							break;
-						case 1:
-							tempItem.name = lineOfText;
-							break;
+					if(lineNumber < 3)
+                    {
+					    switch (lineNumber)
+					    {
+						    case 0:
+							    tempItem.author = lineOfText;
+							    break;
+						    case 1:
+							    tempItem.name = lineOfText;
+							    break;
 							
-					}
+					    }
+
+                    }
+
+
 
 					lineNumber++;
 				}
@@ -70,7 +75,8 @@ public class ScriptLoad : MonoBehaviour {
 		}
 
 		//BroadcastMessage("LoadInLevelList");
-        ScriptCreateScrollList scrollList = gameObject.GetComponent<ScriptCreateScrollList>();
+        ScriptCreateScrollList scrollList = 
+            gameObject.GetComponent<ScriptCreateScrollList>();
         scrollList.LoadInLevelList();
 
 	}
