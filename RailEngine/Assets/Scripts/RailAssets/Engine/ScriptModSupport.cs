@@ -22,6 +22,7 @@ public class ScriptModSupport : MonoBehaviour
 
     void Awake()
     {
+        // Make sure player exists in game data
         if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<ScriptEngine>();
@@ -31,6 +32,8 @@ public class ScriptModSupport : MonoBehaviour
                 Application.Quit();
             }
         }
+        // Make sure waypoints exist in game data
+        // Movement waypoint
         if (movementWaypoint == null)
         {
             movementWaypoint = (GameObject)Resources.Load("movementWaypoint.prefab", typeof(GameObject));
@@ -40,6 +43,7 @@ public class ScriptModSupport : MonoBehaviour
                 Application.Quit();
             }
         }
+        // Facing waypoint
         if (facingWaypoint == null)
         {
             facingWaypoint = (GameObject)Resources.Load("facingWaypoint.prefab", typeof(GameObject));
@@ -49,6 +53,7 @@ public class ScriptModSupport : MonoBehaviour
                 Application.Quit();
             }
         }
+        // Effects waypoint
         if (effectWaypoint == null)
         {
             effectWaypoint = (GameObject)Resources.Load("effectWaypoint.prefab", typeof(GameObject));
@@ -58,15 +63,17 @@ public class ScriptModSupport : MonoBehaviour
                 Application.Quit();
             }
         }
-
+       
+        // Get the mod file
         modFile = new FileInfo(Application.dataPath + "/waypoints.txt");
+        // Create the file if it doesn't exist
         if (!modFile.Exists)
         {
             File.WriteAllText(Application.dataPath + "/waypoints.txt", defaultModFileText);
         }
+
         else
         {
-
             reader = modFile.OpenText();
             if (reader.ReadLine() != defaultModFileText)
             {

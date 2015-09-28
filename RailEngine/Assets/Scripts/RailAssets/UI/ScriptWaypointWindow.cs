@@ -115,7 +115,7 @@ public class ScriptWaypointWindow : EditorWindow
         EditorGUILayout.LabelField("End of waypoint boxes");
         if (GUILayout.Button("Export Data", "miniButtonRight"))
         {
-            Debug.Log("Export data button pushed");
+            ScriptExportLevelData.Init();
         }
         EditorGUILayout.EndHorizontal();
         /*
