@@ -181,42 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52728b62f3a50d243a434d2fa556982d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movements:
-  - movementTime: 3
-    moveType: 1
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
-    showInEditor: 0
-  - movementTime: 5
-    moveType: 2
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
-    showInEditor: 1
-  - movementTime: 2
-    moveType: 0
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
-    showInEditor: 0
-  - movementTime: 3
-    moveType: 2
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
-    showInEditor: 0
-  - movementTime: 3
-    moveType: 1
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
-    showInEditor: 0
-  - movementTime: 2
-    moveType: 0
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
-    showInEditor: 0
-  - movementTime: 4
-    moveType: 2
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
-    showInEditor: 1
+  movements: []
   facings: []
   effects: []
   cameraShakeScript: {fileID: 0}

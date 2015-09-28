@@ -83,7 +83,7 @@ public class ScriptModSupport : MonoBehaviour
 				}
 				reader = modFile.OpenText();
 				string inputLine = reader.ReadLine();
-                //int lineNumber = 0;
+
 				while (inputLine != null)
 				{
 					ScriptMovements tempMove;
@@ -293,8 +293,6 @@ public class ScriptModSupport : MonoBehaviour
 				player.movements = new List<ScriptMovements>(tempMovements.Count);
 				for (int i = 0; i < tempMovements.Count; i++)
 				{
-                    Debug.Log(tempMovements.Count);
-                    Debug.Log(i);
 					player.movements[i] = tempMovements[i];
 				}
 				player.effects = new List<ScriptEffects>(tempEffects.Count);

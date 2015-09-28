@@ -12,7 +12,7 @@ public class ScriptLoad : MonoBehaviour {
 	public Text textConsole;
 
 	TextAsset textFile;
-	TextReader reader;
+	StreamReader reader;
 
 	DirectoryInfo info;
 
@@ -69,6 +69,7 @@ public class ScriptLoad : MonoBehaviour {
 
 			}
 		}
+        reader.Close();
 
 		if(levelNames.Count <= 0)
 		{
@@ -85,14 +86,15 @@ public class ScriptLoad : MonoBehaviour {
 
 	public void ImportLevel(string pLevelName)
 	{
+        Debug.Log("Reading File");
+        FileInfo levelReadingData = new FileInfo(Application.dataPath + "/" + FindLevel(pLevelName));
+        reader = levelReadingData.OpenText();
 
-        //FileInfo tempData;
-        //tempData = new FileInfo(Application.dataPath + "/levelData.txt");
-        //if (!tempData.Exists)
-        //{
-        //    reader = tempData.OpenText();
+        string input = reader.ReadToEnd();
+        reader.Close();
         Debug.Log("Creating levelData from .dan file.");
-        File.WriteAllText(Application.dataPath + "/levelData.txt", Application.dataPath + "/" + FindLevel(pLevelName));
+
+        //File.WriteAllText(Application.dataPath + "/levelData.txt", input);
 
         //}Application.dataPath + "/" + FindLevel(pLevelName)
 
@@ -100,19 +102,20 @@ public class ScriptLoad : MonoBehaviour {
         //      Debug.Log("Writing waypoints.txt with levelData.");
         //      tempData = File.ReadAllText(Application.dataPath + "/levelData.txt");
 
-        File.WriteAllText(Application.dataPath + "/waypoints.txt", Application.dataPath + "/levelData.txt");
+        File.WriteAllText(Application.dataPath + "/waypoints.txt", input);
+        
         Debug.Log("Done Writing to waypoints.");
     }
 
     string FindLevel(string pName)
 	{
-        Debug.Log(pName);
         foreach (string levelName in levelNames)
 		{
 			foreach(Item levelItem in levels)
 			{
                 if (pName == levelItem.name)
 				{
+                    Debug.Log(levelItem.fileName);
 					return levelItem.fileName;
 				}
 				
