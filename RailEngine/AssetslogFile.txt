@@ -1,1 +1,1 @@
-[ERROR]: next waypoint
+[ERROR]: starting wait

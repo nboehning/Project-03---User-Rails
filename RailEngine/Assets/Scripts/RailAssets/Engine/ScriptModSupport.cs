@@ -62,6 +62,7 @@ public class ScriptModSupport : MonoBehaviour
 		modFile = new FileInfo(Application.dataPath + "/waypoints.txt");
 		if (!modFile.Exists)
 		{
+            Debug.Log("Resetting Mod File from ModSupport. :<");
 			File.WriteAllText(Application.dataPath + "/waypoints.txt", defaultModFileText);
 		}
 		else
@@ -82,6 +83,7 @@ public class ScriptModSupport : MonoBehaviour
 				}
 				reader = modFile.OpenText();
 				string inputLine = reader.ReadLine();
+                //int lineNumber = 0;
 				while (inputLine != null)
 				{
 					ScriptMovements tempMove;
@@ -228,7 +230,7 @@ public class ScriptModSupport : MonoBehaviour
 								break;
 							//case FacingTypes.LOOKCHAIN:
 								//Look Chain waypoint spawning Code
-							  /*  tempFacing = new ScriptFacings();
+							    /*  tempFacing = new ScriptFacings();
 								tempFacing.facingType = FacingTypes.LOOKAT;
 							System.Collections.Generic.List<float> tempRotationSpeed = new System.Collections.Generic.List<float>(0);
 							System.Collections.Generic.List<float> tempLockTimes = new System.Collections.Generic.List<float>(0);
@@ -291,6 +293,8 @@ public class ScriptModSupport : MonoBehaviour
 				player.movements = new List<ScriptMovements>(tempMovements.Count);
 				for (int i = 0; i < tempMovements.Count; i++)
 				{
+                    Debug.Log(tempMovements.Count);
+                    Debug.Log(i);
 					player.movements[i] = tempMovements[i];
 				}
 				player.effects = new List<ScriptEffects>(tempEffects.Count);

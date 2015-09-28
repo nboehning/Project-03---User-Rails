@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 [System.Serializable]
@@ -9,6 +7,8 @@ public class Item {
 	public string name;
 	public Sprite icon;
 	public string author;
+	public string dateCreated;
+	public string fileName;
 	public Button.ButtonClickedEvent thingToDo;
 }
 
@@ -19,9 +19,11 @@ public class ScriptCreateScrollList : MonoBehaviour {
 
 	public Transform contentPanel;
 
+	ScriptLoad scriptLoad;
+
 	public void LoadInLevelList()
 	{
-		ScriptLoad scriptLoad = gameObject.GetComponent<ScriptLoad>();
+		scriptLoad = gameObject.GetComponent<ScriptLoad>();
 
 		itemList = scriptLoad.levels;
 		PopulateList();
@@ -36,7 +38,8 @@ public class ScriptCreateScrollList : MonoBehaviour {
 			
 			tempButton.levelName.text = item.name;
 			tempButton.authorLabel.text = item.author;
-			tempButton.icon.sprite = item.icon;
+			
+			//tempButton.icon.sprite = item.icon;
 			
 			//tempButton.button.onClick = item.thingToDo;
 
@@ -51,7 +54,9 @@ public class ScriptCreateScrollList : MonoBehaviour {
 	{
 		
 		Debug.Log(name);
-        Application.LoadLevel("SceneBasic");
+		scriptLoad.ImportLevel(name);
+		Debug.Log("STARTING LOAD");
+		Application.LoadLevel("SceneBasic");
 	}
 
 }
