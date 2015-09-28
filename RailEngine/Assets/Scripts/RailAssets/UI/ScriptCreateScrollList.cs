@@ -53,9 +53,7 @@ public class ScriptCreateScrollList : MonoBehaviour {
 	public void SomethingToDo(string name)
 	{
 		
-		Debug.Log(name);
 		scriptLoad.ImportLevel(name);
-		Debug.Log("STARTING LOAD");
 		Application.LoadLevel("SceneBasic");
 	}
 

@@ -86,43 +86,29 @@ public class ScriptLoad : MonoBehaviour {
 
 	public void ImportLevel(string pLevelName)
 	{
-        Debug.Log("Reading File");
+
         FileInfo levelReadingData = new FileInfo(Application.dataPath + "/" + FindLevel(pLevelName));
         reader = levelReadingData.OpenText();
 
         string input = reader.ReadToEnd();
         reader.Close();
-        Debug.Log("Creating levelData from .dan file.");
-
-        //File.WriteAllText(Application.dataPath + "/levelData.txt", input);
-
-        //}Application.dataPath + "/" + FindLevel(pLevelName)
-
-
-        //      Debug.Log("Writing waypoints.txt with levelData.");
-        //      tempData = File.ReadAllText(Application.dataPath + "/levelData.txt");
 
         File.WriteAllText(Application.dataPath + "/waypoints.txt", input);
         
-        Debug.Log("Done Writing to waypoints.");
+
     }
 
     string FindLevel(string pName)
 	{
-        foreach (string levelName in levelNames)
+		foreach(Item levelItem in levels)
 		{
-			foreach(Item levelItem in levels)
+            if (pName == levelItem.name)
 			{
-                if (pName == levelItem.name)
-				{
-                    Debug.Log(levelItem.fileName);
-					return levelItem.fileName;
-				}
-				
-			}
-		}
 
-		Debug.Log("Default level Loaded.");
+				return levelItem.fileName;
+			}
+				
+		}
 		return "/Resources/embedded.txt";
 		
 	}
