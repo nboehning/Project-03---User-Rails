@@ -37,10 +37,10 @@ public class ScriptCreateScrollList : MonoBehaviour {
 			tempButton.levelName.text = item.name;
 			tempButton.authorLabel.text = item.author;
 			tempButton.icon.sprite = item.icon;
-            
+			
 			//tempButton.button.onClick = item.thingToDo;
 
-            tempButton.button.onClick.AddListener(delegate { SomethingToDo(tempButton.levelName.text); });
+			tempButton.button.onClick.AddListener(delegate { SomethingToDo(tempButton.levelName.text); });
 
 			newButton.transform.SetParent(contentPanel);
 			
