@@ -23,4 +23,7 @@ public class ScriptMovements
 
     [Tooltip("Determine if the window is folded out")]
     public bool showInEditor = true;
+
+    // Added by Nathan
+    public bool dataFoldout;
 }

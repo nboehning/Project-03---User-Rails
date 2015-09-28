@@ -19,7 +19,7 @@ public class ScriptFacings
 
     // Boolean for look chain foldout in window @author: Nathan
     public bool isFoldedOut;
-
-    // int for number of elements in the look chain
+    public bool dataFoldout;
+    // int for number of elements in the look chain @author: Nathan
     public int chainCount;
 }

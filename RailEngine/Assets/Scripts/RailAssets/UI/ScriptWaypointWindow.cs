@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 
+/// <summary>
+/// Create a custom window for designer to input waypoints.
+/// @author Nathan Boehning
+/// </summary>
 public class ScriptWaypointWindow : EditorWindow
 {
     private Vector2 scrollPos1;
@@ -14,12 +16,9 @@ public class ScriptWaypointWindow : EditorWindow
     private ScriptEngine engineScript;
     private Color oldColor;
 
-    private bool[] movementDataFoldouts;
-    private bool[] facingDataFoldouts;
-    private bool[] effectDataFoldouts;
-
     public static void Init()
     {
+        // Set window size and show the window.
         ScriptWaypointWindow window = (ScriptWaypointWindow) GetWindow(typeof (ScriptWaypointWindow));
         window.position = new Rect(100, 100, 931, 510);
         window.maxSize = new Vector2(931, 510);
@@ -29,16 +28,16 @@ public class ScriptWaypointWindow : EditorWindow
 
     void OnFocus()
     {
-
+        // Get the information needed
         player = GameObject.Find("Player");
         engineScript = player.GetComponent<ScriptEngine>();
-        movementDataFoldouts = new bool[engineScript.movements.Count];
-        facingDataFoldouts = new bool[engineScript.facings.Count];
-        effectDataFoldouts = new bool[engineScript.effects.Count];
+        
+        // Set the length of the boolean foldouts based on list length
     }
 
     void OnGUI()
     {
+        #region Waypoints
 
         // Begin area for all of the waypoint types
         EditorGUILayout.BeginHorizontal();
@@ -101,7 +100,6 @@ public class ScriptWaypointWindow : EditorWindow
             {
                 
                 engineScript.movements.RemoveAt(i);
-                movementDataFoldouts = new bool[engineScript.movements.Count];
                 return;
 
             }
@@ -116,11 +114,11 @@ public class ScriptWaypointWindow : EditorWindow
 
             EditorGUI.indentLevel++;
             // Create a foldout that shows all of the waypoint specific variables
-            movementDataFoldouts[i] = EditorGUILayout.Foldout(movementDataFoldouts[i],
+            engineScript.movements[i].dataFoldout = EditorGUILayout.Foldout(engineScript.movements[i].dataFoldout,
                 string.Format("Show Movement Waypoint {0} Data", i + 1));
 
             // If the foldout is open
-            if (movementDataFoldouts[i])
+            if (engineScript.movements[i].dataFoldout)
             {
                 EditorGUI.indentLevel++;
                 // Switch between the different move types
@@ -129,7 +127,7 @@ public class ScriptWaypointWindow : EditorWindow
                     // It's a bezier curve
                     case MovementTypes.BEZIER:
                         // Get the movement time of the waypoint
-                        engineScript.movements[i].movementTime = EditorGUILayout.FloatField("Movement Time: ",
+                        engineScript.movements[i].movementTime = EditorGUILayout.FloatField(new GUIContent("Move Time: ", "Time spent moving in bezier curve"),
                             engineScript.movements[i].movementTime);
 
                         if (engineScript.movements[i].movementTime < 0)
@@ -137,29 +135,30 @@ public class ScriptWaypointWindow : EditorWindow
 
                         // Section to get the end point of the bezier curve
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.LabelField("End Point: ", GUILayout.Width(131));
+                        EditorGUILayout.LabelField(new GUIContent("End Point: ", "Position the player ends their movement"), GUILayout.Width(117));
 
                         engineScript.movements[i].endWaypoint = (GameObject)
                             EditorGUILayout.ObjectField(engineScript.movements[i].endWaypoint, typeof (GameObject), true,
-                                GUILayout.Width(141));
+                                GUILayout.Width(156));
 
                         EditorGUILayout.EndHorizontal();
 
                         // Section to get the curve point of the bezier curve
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.LabelField("Curve Point: ", GUILayout.Width(131));
+                        EditorGUILayout.LabelField(new GUIContent("Curver Point: ", "Point that the curve is based off of"), GUILayout.Width(117));
 
                         engineScript.movements[i].curveWaypoint = (GameObject)
                             EditorGUILayout.ObjectField(engineScript.movements[i].endWaypoint, typeof (GameObject), true,
-                                GUILayout.Width(141));
+                                GUILayout.Width(156));
 
                         // End of "property drawer" section
                         EditorGUILayout.EndHorizontal();
                         break;
+
                     // It's a move (straight line)
                     case MovementTypes.MOVE:
                         // Get the move time
-                        engineScript.movements[i].movementTime = EditorGUILayout.FloatField("Movement Time: ",
+                        engineScript.movements[i].movementTime = EditorGUILayout.FloatField(new GUIContent("Move Time: ", "Time spent moving in straight line"),
                             engineScript.movements[i].movementTime);
 
                         // make sure there can't be a negative time
@@ -168,11 +167,11 @@ public class ScriptWaypointWindow : EditorWindow
 
                         // Section to get the end point of the straight line
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.LabelField("End Point: ", GUILayout.Width(131));
+                        EditorGUILayout.LabelField(new GUIContent("End Point: ", "Position the player ends their movement"), GUILayout.Width(117));
 
                         engineScript.movements[i].endWaypoint = (GameObject)
                             EditorGUILayout.ObjectField(engineScript.movements[i].endWaypoint, typeof (GameObject), true,
-                                GUILayout.Width(141));
+                                GUILayout.Width(156));
 
                         // End of "property drawer"
                         EditorGUILayout.EndHorizontal();                      
@@ -180,7 +179,7 @@ public class ScriptWaypointWindow : EditorWindow
                     // It's a wait
                     case MovementTypes.WAIT:
                         // Get the amount of time the player will wait here as "movement" time.
-                        engineScript.movements[i].movementTime = EditorGUILayout.FloatField("Wait Time: ",
+                        engineScript.movements[i].movementTime = EditorGUILayout.FloatField(new GUIContent("Wait Time: ", "Time spent waiting"),
                             engineScript.movements[i].movementTime);
 
                         if (engineScript.movements[i].movementTime < 0)
@@ -206,7 +205,6 @@ public class ScriptWaypointWindow : EditorWindow
                 movementTime = 0.1f
             };
             engineScript.movements.Add(tempType);
-            movementDataFoldouts = new bool[engineScript.movements.Count];
         }
 
         // End of the movement waypoints vertical area
@@ -266,7 +264,6 @@ public class ScriptWaypointWindow : EditorWindow
             {
 
                 engineScript.facings.RemoveAt(i);
-                facingDataFoldouts = new bool[engineScript.facings.Count];
                 return;
 
             }
@@ -281,11 +278,11 @@ public class ScriptWaypointWindow : EditorWindow
 
             EditorGUI.indentLevel++;
             // Create a foldout that shows all of the waypoint specific variables
-            facingDataFoldouts[i] = EditorGUILayout.Foldout(facingDataFoldouts[i],
+            engineScript.facings[i].dataFoldout = EditorGUILayout.Foldout(engineScript.facings[i].dataFoldout,
                 string.Format("Show Facing Waypoint {0} Data", i + 1));
 
             // If the foldout is open
-            if (facingDataFoldouts[i])
+            if (engineScript.facings[i].dataFoldout)
             {
                 EditorGUI.indentLevel++;
                 // Switch between the different move types
@@ -295,14 +292,12 @@ public class ScriptWaypointWindow : EditorWindow
                     case FacingTypes.FREELOOK:
 
                         // Get the facing time of the waypoint
-                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField("Facing Time: ",
+                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField(new GUIContent("Facing Time: ", "Time spent in free look"),
                             engineScript.facings[i].facingTime);
 
                         // Facing time can't go less than zero
                         if (engineScript.facings[i].facingTime < 0)
                             engineScript.facings[i].facingTime = 0;
-
-                        
 
                         // End of "property drawer"
                         break;
@@ -310,14 +305,36 @@ public class ScriptWaypointWindow : EditorWindow
                     // It's a look at
                     case FacingTypes.LOOKAT:
 
+                        engineScript.facings[i].lockTimes = new float[1];
+                        engineScript.facings[i].targets = new GameObject[1];
+
+                        // Get the rotate time of the waypoint
+                        engineScript.facings[i].lockTimes[0] = EditorGUILayout.FloatField(new GUIContent("Focus Time: ", "Time to rotate to look at point"),
+                            engineScript.facings[i].lockTimes[0]);
+
+                        // Rotate time can't go less than zero
+                        if (engineScript.facings[i].lockTimes[0] < 0)
+                            engineScript.facings[i].lockTimes[0] = 0;
+
+
+                        // Look point game object setter
+                        EditorGUILayout.BeginHorizontal();
+
+                        EditorGUILayout.LabelField(new GUIContent("Focus Point: ", "Location that the camera will look at"), GUILayout.Width(100));
+
+                        engineScript.facings[i].targets[0] = (GameObject)
+                            EditorGUILayout.ObjectField(engineScript.facings[i].targets[0], typeof(GameObject), true,
+                                GUILayout.Width(173));
+
+                        EditorGUILayout.EndHorizontal();
+
                         // Get the facing time of the waypoint
-                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField("Facing Time: ",
+                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField(new GUIContent("Facing Time: ", "Time spent looking at point"),
                             engineScript.facings[i].facingTime);
 
                         // Facing time can't go less than zero
                         if (engineScript.facings[i].facingTime < 0)
                             engineScript.facings[i].facingTime = 0;
-
 
                         // End of "property drawer"
                         break;
@@ -325,25 +342,31 @@ public class ScriptWaypointWindow : EditorWindow
                     // It's a look chain
                     case FacingTypes.LOOKCHAIN:
 
-                        // Get the facing time of the waypoint
-                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField("Facing Time: ",
-                            engineScript.facings[i].facingTime);
-
-                        // Facing time can't go less than zero
-                        if (engineScript.facings[i].facingTime < 0)
-                            engineScript.facings[i].facingTime = 0;
-
                         // Get and set the length of the look chain, make sure it can't go below zero
-                        engineScript.facings[i].chainCount = EditorGUILayout.IntField("Length of Chain: ",
+                        engineScript.facings[i].chainCount = EditorGUILayout.IntField(new GUIContent("Chain Length: ", "Number of points the camera will look at"),
                             engineScript.facings[i].chainCount);
 
                         if (engineScript.facings[i].chainCount < 0)
                             engineScript.facings[i].chainCount = 0;
 
                         // Set the lock times and targets arrays with the new lengths
+                        GameObject[] tempTargets = engineScript.facings[i].targets;
+                        float[] tempLockTimes = engineScript.facings[i].lockTimes;
+                        float[] tempRotationSpeed = engineScript.facings[i].rotationSpeed;
+
+                        // Set the lock times and targets arrays with the new lengths
                         engineScript.facings[i].targets = new GameObject[engineScript.facings[i].chainCount];
                         engineScript.facings[i].lockTimes = new float[engineScript.facings[i].chainCount];
+                        engineScript.facings[i].rotationSpeed = new float[engineScript.facings[i].chainCount];
 
+                        for (int k = 0; k < engineScript.facings[i].chainCount; k++)
+                        {
+                            engineScript.facings[i].targets[k] = tempTargets[k];
+                            engineScript.facings[i].lockTimes[k] = tempLockTimes[k];
+                            engineScript.facings[i].rotationSpeed[k] = tempRotationSpeed[k];
+
+                        }
+                        
                         EditorGUI.indentLevel++;
 
                         // Create a foldout to show all of the elements
@@ -357,15 +380,8 @@ public class ScriptWaypointWindow : EditorWindow
                             // Loop through and show all of the elements of the look chain
                             for (int j = 0; j < engineScript.facings[i].targets.Length; j++)
                             {
-                                // Show the array elements
-                                engineScript.facings[i].lockTimes[j] = EditorGUILayout.FloatField(string.Format("Point {0} Time ", (j + 1)),
-                                    engineScript.facings[i].lockTimes[j]);
 
-                                // Facing time can't go less than zero
-                                if (engineScript.facings[i].lockTimes[j] < 0)
-                                    engineScript.facings[i].lockTimes[j] = 0;
-
-                                // Look point game object getter
+                                // Look point game object setter
                                 EditorGUILayout.BeginHorizontal();
 
                                 EditorGUILayout.LabelField("Point " + (j + 1), GUILayout.Width(100));
@@ -376,6 +392,24 @@ public class ScriptWaypointWindow : EditorWindow
 
                                 EditorGUILayout.EndHorizontal();
 
+                                EditorGUI.indentLevel++;
+                                // Show the array elements
+                                engineScript.facings[i].rotationSpeed[j] = EditorGUILayout.FloatField(new GUIContent("Rotation Time", "Time to rotate to point"),
+                                    engineScript.facings[i].rotationSpeed[j]);
+
+                                // Facing time can't go less than zero
+                                if (engineScript.facings[i].rotationSpeed[j] < 0)
+                                    engineScript.facings[i].rotationSpeed[j] = 0;
+
+                                // Show the array elements
+                                engineScript.facings[i].lockTimes[j] = EditorGUILayout.FloatField(new GUIContent("Look Time ", "Time to look at point"),
+                                    engineScript.facings[i].lockTimes[j]);
+
+                                // Facing time can't go less than zero
+                                if (engineScript.facings[i].lockTimes[j] < 0)
+                                    engineScript.facings[i].lockTimes[j] = 0;
+
+                                EditorGUI.indentLevel--;
                                 // Create spaces for ease of reading
                                 EditorGUILayout.Space();
                                 EditorGUILayout.Space();
@@ -390,21 +424,71 @@ public class ScriptWaypointWindow : EditorWindow
 
                     case FacingTypes.LOOKANDRETURN:
 
+                        // Set the lock times and targets arrays with the new lengths
+                        tempTargets = engineScript.facings[i].targets;
+                        tempLockTimes = engineScript.facings[i].lockTimes;
+                        tempRotationSpeed = engineScript.facings[i].rotationSpeed;
+
+                        // Set the lock times and targets arrays with the new lengths
+                        engineScript.facings[i].targets = new GameObject[1];
+                        engineScript.facings[i].lockTimes = new float[1];
+                        engineScript.facings[i].rotationSpeed = new float[2];
+
+                        for (int k = 0; k < engineScript.facings[i].rotationSpeed.Length; k++)
+                        {
+                            if (k < 1)
+                            {
+                                engineScript.facings[i].targets[k] = tempTargets[k];
+                                engineScript.facings[i].lockTimes[k] = tempLockTimes[k];
+                            }
+                            engineScript.facings[i].rotationSpeed[k] = tempRotationSpeed[k];
+
+                        }
+
                         // Get the facing time of the waypoint
-                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField("Facing Time: ",
-                            engineScript.facings[i].facingTime);
+                        engineScript.facings[i].rotationSpeed[0] = EditorGUILayout.FloatField(new GUIContent("Reach Time: ", "Time spent rotating to look at target point"),
+                            engineScript.facings[i].rotationSpeed[0]);
 
                         // Facing time can't go less than zero
-                        if (engineScript.facings[i].facingTime < 0)
-                            engineScript.facings[i].facingTime = 0;
+                        if (engineScript.facings[i].rotationSpeed[0] < 0)
+                            engineScript.facings[i].rotationSpeed[0] = 0;
+
+                        // Look point game object setter
+                        EditorGUILayout.BeginHorizontal();
+
+                        EditorGUILayout.LabelField(new GUIContent("Focus Point: ", "Point camera will look at."), GUILayout.Width(117));
+
+                        engineScript.facings[i].targets[0] = (GameObject)
+                            EditorGUILayout.ObjectField(engineScript.facings[i].targets[0], typeof(GameObject), true,
+                                GUILayout.Width(156));
+
+                        EditorGUILayout.EndHorizontal();
+
+                        // Get the facing time of the waypoint
+                        
+                        engineScript.facings[i].lockTimes[0] = EditorGUILayout.FloatField(new GUIContent("Time At: ", "Time spent looking at point"),
+                            engineScript.facings[i].lockTimes[0]);
+
+                        // Facing time can't go less than zero
+                        if (engineScript.facings[i].lockTimes[0] < 0)
+                            engineScript.facings[i].lockTimes[0] = 0;
+
+                        // Get the facing time of the waypoint
+                        engineScript.facings[i].rotationSpeed[1] = EditorGUILayout.FloatField(new GUIContent("Return Time: ", "Time spent returning to original rotation"),
+                            engineScript.facings[i].rotationSpeed[1]);
+
+                        // Facing time can't go less than zero
+                        if (engineScript.facings[i].rotationSpeed[1] < 0)
+                            engineScript.facings[i].rotationSpeed[1] = 0;
 
                         // End of "property drawer"
                         break;
+
                     // It's a wait
                     case FacingTypes.WAIT:
 
                         // Get the facing time of the waypoint
-                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField("Facing Time: ",
+                        engineScript.facings[i].facingTime = EditorGUILayout.FloatField(new GUIContent("Wait Time: ", "Time spent waiting"),
                             engineScript.facings[i].facingTime);
 
                         // Facing time can't go less than zero
@@ -433,7 +517,6 @@ public class ScriptWaypointWindow : EditorWindow
                 facingTime = 0.1f
             };
             engineScript.facings.Add(tempType);
-            facingDataFoldouts = new bool[engineScript.facings.Count];
         }
 
         EditorGUILayout.EndVertical();
@@ -495,7 +578,6 @@ public class ScriptWaypointWindow : EditorWindow
             {
 
                 engineScript.effects.RemoveAt(i);
-                effectDataFoldouts = new bool[engineScript.effects.Count];
                 return;
 
             }
@@ -510,11 +592,11 @@ public class ScriptWaypointWindow : EditorWindow
 
             EditorGUI.indentLevel++;
             // Create a foldout that shows all of the waypoint specific variables
-            effectDataFoldouts[i] = EditorGUILayout.Foldout(effectDataFoldouts[i],
+            engineScript.effects[i].dataFoldout = EditorGUILayout.Foldout(engineScript.effects[i].dataFoldout,
                 string.Format("Show Effect Waypoint {0} Data", i + 1));
 
             // If the foldout is open
-            if (effectDataFoldouts[i])
+            if (engineScript.effects[i].dataFoldout)
             {
                 EditorGUI.indentLevel++;
                 // Switch between the different move types
@@ -524,20 +606,28 @@ public class ScriptWaypointWindow : EditorWindow
                     case EffectTypes.FADE:
 
                         // Get the fade out time of the waypoint
-                        engineScript.effects[i].fadeInTime = EditorGUILayout.FloatField("Fade In Time: ",
-                            engineScript.effects[i].fadeInTime);
-
-                        // fade in time can't go less than zero
-                        if (engineScript.effects[i].fadeInTime < 0)
-                            engineScript.effects[i].fadeInTime = 0;
-
-                        // Get the fade out time of the waypoint
-                        engineScript.effects[i].fadeOutTime = EditorGUILayout.FloatField("Fade Out Time: ",
+                        engineScript.effects[i].fadeOutTime = EditorGUILayout.FloatField(new GUIContent("Fade Out Time: ", "Time to fade to black"),
                             engineScript.effects[i].fadeOutTime);
 
                         // fade in time can't go less than zero
                         if (engineScript.effects[i].fadeOutTime < 0)
                             engineScript.effects[i].fadeOutTime = 0;
+
+                        // Get the facing time of the waypoint
+                        engineScript.effects[i].effectTime = EditorGUILayout.FloatField(new GUIContent("Faded Time: ", "Time spent with black screen."),
+                            engineScript.effects[i].effectTime);
+
+                        // Facing time can't go less than zero
+                        if (engineScript.effects[i].effectTime < 0)
+                            engineScript.effects[i].effectTime = 0;
+
+                        // Get the fade out time of the waypoint
+                        engineScript.effects[i].fadeInTime = EditorGUILayout.FloatField(new GUIContent("Fade In Time: ", "Time to fade the camera in"),
+                            engineScript.effects[i].fadeInTime);
+
+                        // fade in time can't go less than zero
+                        if (engineScript.effects[i].fadeInTime < 0)
+                            engineScript.effects[i].fadeInTime = 0;
 
                         // End of "property drawer"
                         break;
@@ -546,16 +636,16 @@ public class ScriptWaypointWindow : EditorWindow
                     case EffectTypes.SHAKE:
 
                         // Get the facing time of the waypoint
-                        engineScript.effects[i].effectTime = EditorGUILayout.FloatField("Effect Time: ",
+                        engineScript.effects[i].effectTime = EditorGUILayout.FloatField(new GUIContent("Effect Time: ", "Time camera spends shaking"),
                             engineScript.effects[i].effectTime);
 
                         // Facing time can't go less than zero
                         if (engineScript.effects[i].effectTime < 0)
                             engineScript.effects[i].effectTime = 0;
 
-                        EditorGUILayout.LabelField("Magnitude (0-100%):");
-                        engineScript.effects[i].magnitude = EditorGUILayout.Slider(engineScript.effects[i].magnitude, 0f,
-                            100f);
+                        EditorGUILayout.LabelField(new GUIContent("Magnitude: ", "Moves camera X units"));
+                        engineScript.effects[i].magnitude = EditorGUILayout.Slider(engineScript.effects[i].magnitude, 0.1f,
+                            3.0f);
 
 
                         // End of "property drawer"
@@ -565,16 +655,18 @@ public class ScriptWaypointWindow : EditorWindow
                     case EffectTypes.SPLATTER:
 
                         // Get the facing time of the waypoint
-                        engineScript.effects[i].effectTime = EditorGUILayout.FloatField("Effect Time: ",
+                        engineScript.effects[i].effectTime = EditorGUILayout.FloatField(new GUIContent("Effect Time: ", "Time camera spends splattered"),
                             engineScript.effects[i].effectTime);
 
                         // Facing time can't go less than zero
                         if (engineScript.effects[i].effectTime < 0)
                             engineScript.effects[i].effectTime = 0;
 
-                        EditorGUILayout.LabelField("Image Scale (16:9): ");
-                        engineScript.effects[i].imageScale = EditorGUILayout.FloatField("Scale 0 is true size ",
+                        engineScript.effects[i].imageScale = EditorGUILayout.FloatField(new GUIContent("Image Scale: ", "16:9 aspect ratio"),
                             engineScript.effects[i].imageScale);
+
+                        if (engineScript.effects[i].imageScale <= 0)
+                            engineScript.effects[i].imageScale = 0.1f;
 
                         // End of "property drawer"
                         break;
@@ -582,7 +674,7 @@ public class ScriptWaypointWindow : EditorWindow
                     case EffectTypes.WAIT:
 
                         // Get the facing time of the waypoint
-                        engineScript.effects[i].effectTime = EditorGUILayout.FloatField("Wait Time: ",
+                        engineScript.effects[i].effectTime = EditorGUILayout.FloatField(new GUIContent("Wait Time: ", "Time spent waiting"),
                             engineScript.effects[i].effectTime);
 
                         // Facing time can't go less than zero
@@ -613,7 +705,6 @@ public class ScriptWaypointWindow : EditorWindow
                 effectTime = 0.1f
             };
             engineScript.effects.Add(tempType);
-            effectDataFoldouts = new bool[engineScript.effects.Count];
         }
 
         EditorGUILayout.EndVertical();
@@ -622,6 +713,9 @@ public class ScriptWaypointWindow : EditorWindow
         // End of waypoints area.
         EditorGUILayout.EndHorizontal();
 
+        #endregion
+
+        #region Export Button
         // Begin area for the export data button.
         GUILayout.BeginHorizontal();
         GUILayout.BeginArea(new Rect((Screen.width / 3) * 2 + 200, position.height - 27, 150, 50));
@@ -635,8 +729,11 @@ public class ScriptWaypointWindow : EditorWindow
         GUILayout.EndArea();
         GUILayout.EndHorizontal();
 
+        #endregion
+
     }
 
+    #region Helper Functions
     // Method to see whether element is at first position of array or not
     bool CanMoveUp(int i)
     {
@@ -689,4 +786,5 @@ public class ScriptWaypointWindow : EditorWindow
         engineScript.effects[i1] = engineScript.effects[i2];
         engineScript.effects[i2] = tmp;
     }
+    #endregion
 }

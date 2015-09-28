@@ -22,4 +22,10 @@ public class ScriptEffects
 
     //variables for camera shake
     public float magnitude;
+
+    // Added bool to see if splatter will fade
+    public bool willFade;
+
+    // Added by Nathan
+    public bool dataFoldout;
 }
