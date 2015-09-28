@@ -7,9 +7,9 @@ commands in an editor window.
 
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 public class ScriptExportLevelData : EditorWindow
 {
@@ -71,9 +71,9 @@ public class ScriptExportLevelData : EditorWindow
     {
         StringBuilder data;
         StreamWriter writer = new StreamWriter(levelName + ".txt.", false);
-        ScriptMovements[] moves = GameObject.Find("Player").GetComponent<ScriptEngine>().movements;
-        ScriptEffects[] effects = GameObject.Find("Player").GetComponent<ScriptEngine>().effects;
-        ScriptFacings[] facings = GameObject.Find("Player").GetComponent<ScriptEngine>().facings;
+        List<ScriptMovements> moves = GameObject.Find("Player").GetComponent<ScriptEngine>().movements;
+        List<ScriptEffects> effects = GameObject.Find("Player").GetComponent<ScriptEngine>().effects;
+        List<ScriptFacings> facings = GameObject.Find("Player").GetComponent<ScriptEngine>().facings;
 
         // Write level data
         writer.WriteLine(levelName);
