@@ -705,6 +705,8 @@ public class ScriptWaypointWindow : EditorWindow
                 effectTime = 0.1f
             };
             engineScript.effects.Add(tempType);
+
+            ScriptExportLevelData.Init();
         }
 
         EditorGUILayout.EndVertical();

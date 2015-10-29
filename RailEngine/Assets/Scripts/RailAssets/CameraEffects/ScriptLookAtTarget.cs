@@ -33,7 +33,6 @@ public class ScriptLookAtTarget : MonoBehaviour {
 	{
 		for (int i = 0; i < targets.Length; i++ )
 		{
-            float timeElapsed = 0.0f;
 		    startRotation = transform.rotation;
             Quaternion neededRotation = Quaternion.LookRotation((targets[i].transform.position - transform.position).normalized);
 

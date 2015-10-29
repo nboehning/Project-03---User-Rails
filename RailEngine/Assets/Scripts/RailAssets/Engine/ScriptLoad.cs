@@ -12,7 +12,7 @@ public class ScriptLoad : MonoBehaviour {
 	public Text textConsole;
 
 	TextAsset textFile;
-	TextReader reader;
+	StreamReader reader;
 
 	DirectoryInfo info;
 
@@ -32,7 +32,7 @@ public class ScriptLoad : MonoBehaviour {
 		{
 			if (file.Name.EndsWith(".dan"))
 			{
-				levelNames.Add(file.Name.ToString());
+				levelNames.Add(file.Name);
 				textConsole.text += "\n" + file;
 
 				reader = file.OpenText();
@@ -45,29 +45,31 @@ public class ScriptLoad : MonoBehaviour {
 				{
 
 					if(lineNumber < 3)
-                    {
-					    switch (lineNumber)
-					    {
-						    case 0:
-							    tempItem.author = lineOfText;
-							    break;
-						    case 1:
-							    tempItem.name = lineOfText;
-							    break;
+					{
+						switch (lineNumber)
+						{
+							case 0:
+								tempItem.author = lineOfText;
+								break;
+							case 1:
+								tempItem.name = lineOfText;
+								break;
 							
-					    }
+						}
 
-                    }
+					}
 
 
 
 					lineNumber++;
 				}
+				tempItem.fileName = file.Name;
 
 				levels.Add(tempItem);
 
 			}
 		}
+        reader.Close();
 
 		if(levelNames.Count <= 0)
 		{
@@ -75,13 +77,41 @@ public class ScriptLoad : MonoBehaviour {
 		}
 
 		//BroadcastMessage("LoadInLevelList");
-        ScriptCreateScrollList scrollList = 
-            gameObject.GetComponent<ScriptCreateScrollList>();
-        scrollList.LoadInLevelList();
+		ScriptCreateScrollList scrollList = 
+			gameObject.GetComponent<ScriptCreateScrollList>();
+		scrollList.LoadInLevelList();
 
 	}
 
 
-	
-	
+	public void ImportLevel(string pLevelName)
+	{
+
+        FileInfo levelReadingData = new FileInfo(Application.dataPath + "/" + FindLevel(pLevelName));
+        reader = levelReadingData.OpenText();
+
+        string input = reader.ReadToEnd();
+        reader.Close();
+
+        File.WriteAllText(Application.dataPath + "/waypoints.txt", input);
+        
+
+    }
+
+    string FindLevel(string pName)
+	{
+		foreach(Item levelItem in levels)
+		{
+            if (pName == levelItem.name)
+			{
+
+				return levelItem.fileName;
+			}
+				
+		}
+		return "/Resources/embedded.txt";
+		
+	}
+
+
 }

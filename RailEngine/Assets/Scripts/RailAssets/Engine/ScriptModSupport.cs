@@ -62,6 +62,7 @@ public class ScriptModSupport : MonoBehaviour
 		modFile = new FileInfo(Application.dataPath + "/waypoints.txt");
 		if (!modFile.Exists)
 		{
+
 			File.WriteAllText(Application.dataPath + "/waypoints.txt", defaultModFileText);
 		}
 		else
@@ -71,9 +72,9 @@ public class ScriptModSupport : MonoBehaviour
 			if (reader.ReadLine() != defaultModFileText)
 			{
 				reader.Close();
-				System.Collections.Generic.List<ScriptMovements> tempMovements = new System.Collections.Generic.List<ScriptMovements>(0);
-				System.Collections.Generic.List<ScriptEffects> tempEffects = new System.Collections.Generic.List<ScriptEffects>(0);
-				System.Collections.Generic.List<ScriptFacings> tempFacings = new System.Collections.Generic.List<ScriptFacings>(0);
+				List<ScriptMovements> tempMovements = new List<ScriptMovements>();
+				List<ScriptEffects> tempEffects = new List<ScriptEffects>();
+				List<ScriptFacings> tempFacings = new List<ScriptFacings>();
 
 				GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
 				foreach (GameObject go in waypoints)
@@ -82,6 +83,7 @@ public class ScriptModSupport : MonoBehaviour
 				}
 				reader = modFile.OpenText();
 				string inputLine = reader.ReadLine();
+
 				while (inputLine != null)
 				{
 					ScriptMovements tempMove;
@@ -183,9 +185,9 @@ public class ScriptModSupport : MonoBehaviour
 								//Look At waypoint spawning Code
 								tempFacing = new ScriptFacings();
 							tempFacing.facingType = (FacingTypes)System.Enum.Parse(typeof(FacingTypes), words[0].ToUpper());
-							System.Collections.Generic.List<float> tempRotationSpeed = new System.Collections.Generic.List<float>(0);
-							System.Collections.Generic.List<float> tempLockTimes = new System.Collections.Generic.List<float>(0);
-							System.Collections.Generic.List<GameObject> tempTargets = new System.Collections.Generic.List<GameObject>(0);
+							List<float> tempRotationSpeed = new List<float>();
+							List<float> tempLockTimes = new List<float>();
+							List<GameObject> tempTargets = new List<GameObject>();
 								for (int i = 1; i < words.Length; i++ )
 								{
 									if (i % 3 == 1)
@@ -228,7 +230,7 @@ public class ScriptModSupport : MonoBehaviour
 								break;
 							//case FacingTypes.LOOKCHAIN:
 								//Look Chain waypoint spawning Code
-							  /*  tempFacing = new ScriptFacings();
+							    /*  tempFacing = new ScriptFacings();
 								tempFacing.facingType = FacingTypes.LOOKAT;
 							System.Collections.Generic.List<float> tempRotationSpeed = new System.Collections.Generic.List<float>(0);
 							System.Collections.Generic.List<float> tempLockTimes = new System.Collections.Generic.List<float>(0);
@@ -288,17 +290,17 @@ public class ScriptModSupport : MonoBehaviour
 					}
 					inputLine = reader.ReadLine();
 				}
-				player.movements = new List<ScriptMovements>(tempMovements.Count);
+				player.movements = new List<ScriptMovements>();
 				for (int i = 0; i < tempMovements.Count; i++)
 				{
 					player.movements[i] = tempMovements[i];
 				}
-				player.effects = new List<ScriptEffects>(tempEffects.Count);
+				player.effects = new List<ScriptEffects>();
 				for (int i = 0; i < tempEffects.Count; i++)
 				{
 					player.effects[i] = tempEffects[i];
 				}
-				player.facings = new List<ScriptFacings>(tempFacings.Count);
+				player.facings = new List<ScriptFacings>();
 				for (int i = 0; i < tempFacings.Count; i++)
 				{
 					player.facings[i] = tempFacings[i];

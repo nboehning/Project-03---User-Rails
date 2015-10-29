@@ -8,5 +8,6 @@ public class SampleButton : MonoBehaviour {
     public Text authorLabel;
     public Image icon;
     public Text levelName;
+    public Text dateLabel;
     
 }
