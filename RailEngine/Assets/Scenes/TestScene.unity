@@ -133,10 +133,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0a58b6c91fc679343bc29576caa9e48a, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &119114608 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 149040, guid: 0a58b6c91fc679343bc29576caa9e48a, type: 2}
-  m_PrefabInternal: {fileID: 119114607}
 --- !u!1001 &181137065
 Prefab:
   m_ObjectHideFlags: 0
@@ -390,20 +386,20 @@ MonoBehaviour:
   movements:
   - movementTime: 4
     moveType: 1
-    endWaypoint: {fileID: 119114608}
+    endWaypoint: {fileID: 181137066}
     curveWaypoint: {fileID: 0}
     showInEditor: 1
     dataFoldout: 1
   - movementTime: .100000001
     moveType: 1
-    endWaypoint: {fileID: 0}
+    endWaypoint: {fileID: 562229936}
     curveWaypoint: {fileID: 0}
     showInEditor: 1
     dataFoldout: 1
   - movementTime: .100000001
     moveType: 2
-    endWaypoint: {fileID: 0}
-    curveWaypoint: {fileID: 0}
+    endWaypoint: {fileID: 562229936}
+    curveWaypoint: {fileID: 562229936}
     showInEditor: 1
     dataFoldout: 1
   - movementTime: .100000001
@@ -411,7 +407,7 @@ MonoBehaviour:
     endWaypoint: {fileID: 0}
     curveWaypoint: {fileID: 0}
     showInEditor: 1
-    dataFoldout: 0
+    dataFoldout: 1
   facings:
   - facingType: 4
     targets:
@@ -478,54 +474,6 @@ MonoBehaviour:
     magnitude: 0
     willFade: 0
     dataFoldout: 1
-  - effectType: 0
-    effectTime: .100000001
-    fadeInTime: 0
-    fadeOutTime: 0
-    imageScale: 0
-    magnitude: 0
-    willFade: 0
-    dataFoldout: 0
-  - effectType: 3
-    effectTime: .100000001
-    fadeInTime: 0
-    fadeOutTime: 0
-    imageScale: 0
-    magnitude: 0
-    willFade: 0
-    dataFoldout: 0
-  - effectType: 3
-    effectTime: .100000001
-    fadeInTime: 0
-    fadeOutTime: 0
-    imageScale: 0
-    magnitude: 0
-    willFade: 0
-    dataFoldout: 0
-  - effectType: 3
-    effectTime: .100000001
-    fadeInTime: 0
-    fadeOutTime: 0
-    imageScale: 0
-    magnitude: 0
-    willFade: 0
-    dataFoldout: 0
-  - effectType: 3
-    effectTime: .100000001
-    fadeInTime: 0
-    fadeOutTime: 0
-    imageScale: 0
-    magnitude: 0
-    willFade: 0
-    dataFoldout: 0
-  - effectType: 3
-    effectTime: .100000001
-    fadeInTime: 0
-    fadeOutTime: 0
-    imageScale: 0
-    magnitude: 0
-    willFade: 0
-    dataFoldout: 0
   cameraShakeScript: {fileID: 0}
   lookAtScript: {fileID: 0}
   fadeScript: {fileID: 0}
@@ -938,7 +886,6 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
-  m_TargetEye: 3
   m_HDR: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10

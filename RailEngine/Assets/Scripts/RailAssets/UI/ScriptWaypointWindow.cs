@@ -21,8 +21,8 @@ public class ScriptWaypointWindow : EditorWindow
         // Set window size and show the window.
         ScriptWaypointWindow window = (ScriptWaypointWindow) GetWindow(typeof (ScriptWaypointWindow));
         window.position = new Rect(100, 100, 931, 510);
-        window.maxSize = new Vector2(931, 510);
-        window.minSize = window.maxSize;
+        window.maxSize = new Vector2(931 + 500, 510 + 200);
+        window.minSize = new Vector2(931, 510);
         window.Show();
     }
 
@@ -148,7 +148,7 @@ public class ScriptWaypointWindow : EditorWindow
                         EditorGUILayout.LabelField(new GUIContent("Curver Point: ", "Point that the curve is based off of"), GUILayout.Width(117));
 
                         engineScript.movements[i].curveWaypoint = (GameObject)
-                            EditorGUILayout.ObjectField(engineScript.movements[i].endWaypoint, typeof (GameObject), true,
+                            EditorGUILayout.ObjectField(engineScript.movements[i].curveWaypoint, typeof (GameObject), true,
                                 GUILayout.Width(156));
 
                         // End of "property drawer" section
